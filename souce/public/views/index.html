@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatting Room</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div id="list-container">
+        <p style="font-size: x-large; padding-left: 20px; font-weight: bold;">Online</p>
+        <ul id="listuser" class="listuser"></ul>
+    </div>
+    <div id="messages-container">
+        <ul id="messages" class="chat-list"></ul>
+        <form id="chat-form" class="chat-form">
+            <textarea id="chat-mes" class="chat-input"></textarea> 
+            <input type="file" id="file-input" class="file-input"/>
+            <button id="send-chat" class="send-button">Send</button>
+        </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const socket = io();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name') || 'No Name';            
+            const chatForm = document.querySelector('#chat-form');
+            const chatMes = document.querySelector('#chat-mes');
+            const sendChatButton = document.querySelector('#send-chat');
+            const scrollContainer = document.querySelector('.chat-list');
+            const listUser = document.querySelector('#listuser'); 
+            const fileInput = document.querySelector('#file-input');
+
+
+            fileInput.addEventListener('change', selectFile);
+
+            function selectFile(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    setFile(file);
+                }
+            }
+
+            chatMes.addEventListener('input', () => {
+                sendChatButton.disabled = !chatMes.value.trim();
+            });
+
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = chatMes.value;
+                const file = fileInput.files[0];
+
+                if (file) {
+                    // Handle file upload
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const fileContent = e.target.result;
+                        const fileData = {
+                            name: file.name,
+                            type: file.type,
+                            content: fileContent,
+                        };
+
+                        // Notify the server about the file
+                        socket.emit('on-chat', {
+                            name,
+                            message,
+                            file: fileData,
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Regular text message without file
+                    socket.emit('on-chat', {
+                        name,
+                        message
+                    });
+                }
+
+                chatMes.value = '';
+                sendChatButton.disabled = true;
+            });
+
+            
+            // Gửi sự kiện 'login' khi trang tải
+            socket.emit('login', name, (acknowledgment) => {
+                console.log(acknowledgment); // Bạn có thể xử lý thông báo khi cần
+            });
+
+            // Listen for the update-user-list event
+            socket.on('update-user-list', (userList) => {
+                listUser.innerHTML = ''; // Clear the list before updating
+                userList.forEach((user) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = user + '🟢';
+                    listUser.appendChild(listItem);
+                });
+            });
+
+            const messages = document.querySelector('#messages');
+            socket.on('user-chat', (message) => {
+                const chatItem = document.createElement('li');
+                const nameElement = document.createElement('div');
+                nameElement.classList.add('name');
+                nameElement.textContent = message.name +':';
+                chatItem.appendChild(nameElement);
+                const messageElement = document.createElement('div');
+                const imageElement = document.createElement('img');
+                const fileLink = document.createElement('a');
+
+                if (message.file) {
+                    // Check if the message contains a file (image)
+                    if (message.file.type.startsWith('image')) {
+                        // If it's an image, display it as an image
+                        imageElement.classList.add('message-image');
+                        // Assuming 'message.file.content' is a base64-encoded representation of the image
+                        imageElement.src = message.file.content;
+                        chatItem.appendChild(imageElement);
+                    } else {
+                        // If it's not an image, create a download link
+                        fileLink.href = message.file.content;
+                        fileLink.textContent = message.file.name;
+                        fileLink.download = message.file.name;
+                        messageElement.appendChild(fileLink);
+                    }
+                }
+
+                // Check the file type
+                if (!message.file || message.file.type.startsWith('image')) {
+                    // If there's no file or it's an image, display the text message
+                    messageElement.classList.add('message');
+                    messageElement.textContent = message.message;
+                }
+
+                // Check the sender of the message to apply the corresponding CSS class
+                if (message.name === name) {
+                    imageElement.classList.add('message-image');
+                    fileLink.classList.add('message-image');
+                    messageElement.classList.add('your-message');
+                    nameElement.classList.add('your-name');
+                } else {
+                    imageElement.classList.add('other-message-image');
+                    fileLink.classList.add('other-message-image');
+                    messageElement.classList.add('other-message');
+                    nameElement.classList.add('other-name');
+                }
+                fileInput.value = '';
+                chatItem.appendChild(messageElement);
+                messages.appendChild(chatItem);
+                scrollContainer.scrollTop = scrollContainer.scrollHeight;
+            });
+        });
+    </script>
+</body>
+</html>

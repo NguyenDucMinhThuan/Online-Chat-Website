@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatting Room</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id ="login-form">
+        <input type="text" class="login" id="login" placeholder="Enter your name">
+        <button class="login-btn" id="login-btn">Join</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const socket = io();
+            
+            const nameInput = document.getElementById('login');
+            const loginButton = document.getElementById('login-btn');
+
+            loginButton.addEventListener('click', () => {
+                const name = nameInput.value;
+                if (name.trim() !== '') {
+                    const redirectUrl = `/index?name=${encodeURIComponent(name)}`;
+                    socket.emit('login', name, (acknowledgment) => {
+                        if (acknowledgment === 'success') {
+                            window.location.href = redirectUrl;
+                        } else {
+                            alert('Đăng nhập không thành công. Vui lòng thử lại.');
+                        }
+                    });
+                } else {
+                    alert('Vui lòng nhập tên của bạn.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

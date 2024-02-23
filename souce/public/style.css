@@ -1,0 +1,214 @@
+
+body {
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    background-color: #f4f4f4;
+    margin: 0px;
+    display: flex;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgb(219, 94, 198) 0%, rgb(201, 135, 195) 35%, rgb(193, 163, 194)83%, rgb(221, 181, 233)100%);        
+}
+
+#messages-container {
+    padding: 20px 50px 20px 50px;
+    flex:9;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+#list-container {
+    padding-top: 20px ;
+    padding-bottom: 20px ;
+    padding-left: 50px ;
+    flex:3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.chat-list {
+    border-radius: 20px;
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    height: 100%;
+    background-color: #333;
+}
+.listuser {
+    border-radius: 20px;
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+.chat-list li {
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.listuser li {
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: #e4dcdc;
+    border-radius: 20px;
+    padding: 10px;
+}
+.your-message {
+    border-radius: 20px;
+    padding: 10px;
+    color:#f5f5f5 ;
+    background-color: rgb(86, 154, 185);
+    align-self: flex-end;
+    text-align: right; /* Để căn chỉnh văn bản từ phải sang trái */
+}
+.your-name {
+    padding: 10px;
+    color:#979292 ;
+    align-self: flex-end;
+    text-align: right; /* Để căn chỉnh văn bản từ phải sang trái */
+}
+.other-message {
+    border-radius: 20px;
+    padding: 10px;
+    color:rgb(0, 0, 0) ;
+    background-color: rgb(255, 255, 255);
+    align-self: flex-start;
+    text-align: left; /* Để căn chỉnh văn bản từ trái sang phải */
+}
+.message-image {
+    max-width: fit-content;
+    max-height: 200px; 
+    border-radius: 8px; 
+    margin-top: 8px; 
+    align-self: flex-end;
+    text-align: right;
+}
+.other-message-image {
+    max-width: fit-content;
+    max-height: 200px; 
+    border-radius: 8px; 
+    margin-top: 8px; 
+    align-self: flex-start;
+    text-align: left;
+}
+
+.other-name {
+    padding: 10px;
+    color:#979292 ;
+    align-self: flex-start;
+    text-align: left; /* Để căn chỉnh văn bản từ trái sang phải */
+}
+.name {
+    margin-right: 5px; /* tạo khoảng cách giữa tên và tin nhắn */
+}
+.chat-list li .name, .chat-list li .message {
+    white-space: nowrap; /* Ngăn chặn quá trình ngắt dòng */
+}
+
+.chat-form {
+    display: flex;
+    margin-top: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 15px;
+    background-color: #333;
+    color: #fff;
+}
+.clear-button{
+    border-radius: 15px;
+    background-color: rgb(175, 91, 76);
+    color: #fff;
+    border: none;
+    padding: 8px 25px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.send-button {
+    border-radius: 15px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 8px 25px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.file-input {
+    border-radius: 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 25px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.login-btn:hover {
+    background-color: rgb(108, 179, 97);
+}
+.send-button:hover {
+    background-color: rgb(108, 179, 97);
+}
+
+html ::-webkit-scrollbar {
+    border-radius: 0px;
+    width: 8px;
+}
+
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+
+html ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(22, 24, 35, 0.06);
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(22, 24, 35, .06);
+}
+
+html ::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#login-form{
+    padding: 320px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.login{
+    font-size: 40px;
+    padding: 8px;
+    border-radius: 15px;
+    background-color: #333;
+    color: #fff;
+}
+.login-btn{
+    font-size: 40px;
+    border-radius: 15px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 8px 25px;
+    cursor: pointer;
+    margin-left: 5px;
+}
